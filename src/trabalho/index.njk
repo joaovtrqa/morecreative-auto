@@ -1,0 +1,119 @@
+---
+layout: base.njk
+pagination:
+  data: works
+  size: 1
+  alias: work
+permalink: "/trabalho/{{ work.slug }}/"
+eleventyComputed:
+  title: "{{ work.title }} — More Creative"
+  activePage: "trabalhos"
+---
+<section class="project-hero">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span>{{ work.category | upper }}</div>
+    <h1>{{ work.title }}</h1>
+    <div class="project-meta-row">
+      <div class="slate">
+        <span>CLIENTE<b>{{ work.client }}</b></span>
+        <span>ANO<b>{{ work.year }}</b></span>
+        <span>CATEGORIA<b>{{ work.category }}</b></span>
+      </div>
+    </div>
+    <p class="project-summary">{{ work.body | safe }}</p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="project-media">
+    {% if work.media.length == 0 %}
+    <div style="padding:60px;text-align:center;color:var(--fg-dim);font-family:var(--mono);font-size:13px;border:1px dashed var(--line-strong);border-radius:4px;">
+      Material deste trabalho ainda não foi adicionado.
+    </div>
+    {% endif %}
+
+    {% for m in work.media %}
+      {% if m.type == "video" %}
+      <div class="media-single">
+        <div class="video-wrap">
+          <video src="{{ m.src }}" controls playsinline onclick="openVideoLightbox('{{ m.src }}')"></video>
+          <button class="video-expand" onclick="event.stopPropagation();openVideoLightbox('{{ m.src }}')" aria-label="Expandir vídeo">⤢</button>
+        </div>
+      </div>
+      {% if m.caption %}<div class="media-caption">{{ m.caption }}</div>{% endif %}
+      {% endif %}
+    {% endfor %}
+
+    {% set images = work.media | excludeType("video") %}
+    {% if images.length == 1 %}
+      <div class="media-single">
+        <img src="{{ images[0].src }}" alt="{{ images[0].caption or work.title }}" onclick="openLightbox('{{ images[0].src }}')">
+      </div>
+      {% if images[0].caption %}<div class="media-caption">{{ images[0].caption }}</div>{% endif %}
+    {% elif images.length > 1 %}
+      <div class="media-gallery">
+        {% for m in images %}
+        <figure>
+          <img src="{{ m.src }}" alt="{{ m.caption or work.title }}" onclick="openLightbox('{{ m.src }}')" onload="fitMasonryItem(this)">
+        </figure>
+        {% endfor %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <button class="lightbox-close" onclick="event.stopPropagation();closeLightbox()">FECHAR ✕</button>
+  <img id="lightboxImg" src="" alt="">
+</div>
+
+<div class="lightbox lightbox-video" id="lightboxVideo" onclick="closeVideoLightbox()">
+  <button class="lightbox-close" onclick="event.stopPropagation();closeVideoLightbox()">FECHAR ✕</button>
+  <video id="lightboxVideoEl" src="" controls playsinline onclick="event.stopPropagation()"></video>
+</div>
+
+<script>
+  function openLightbox(src) {
+    document.getElementById("lightboxImg").src = src;
+    document.getElementById("lightbox").classList.add("open");
+  }
+  function closeLightbox() {
+    document.getElementById("lightbox").classList.remove("open");
+  }
+  function openVideoLightbox(src) {
+    const vid = document.getElementById("lightboxVideoEl");
+    vid.src = src;
+    document.getElementById("lightboxVideo").classList.add("open");
+    vid.play();
+  }
+  function closeVideoLightbox() {
+    const vid = document.getElementById("lightboxVideoEl");
+    vid.pause();
+    document.getElementById("lightboxVideo").classList.remove("open");
+  }
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") { closeLightbox(); closeVideoLightbox(); }
+  });
+  function fitMasonryItem(img) {
+    const grid = img.closest(".media-gallery");
+    if (!grid) return;
+    const rowHeight = 10;
+    const gap = 12;
+    const figure = img.parentElement;
+    const naturalRatio = img.naturalHeight / img.naturalWidth;
+    const columnWidth = figure.getBoundingClientRect().width;
+    const renderedHeight = columnWidth * naturalRatio;
+    const span = Math.ceil((renderedHeight + gap) / (rowHeight + gap));
+    figure.style.gridRowEnd = `span ${span}`;
+  }
+  window.addEventListener("resize", () => {
+    document.querySelectorAll(".media-gallery img").forEach((img) => {
+      if (img.complete) fitMasonryItem(img);
+    });
+  });
+  document.addEventListener("DOMContentLoaded", () => {
+    document.querySelectorAll(".media-gallery img").forEach((img) => {
+      if (img.complete) fitMasonryItem(img);
+    });
+  });
+</script>

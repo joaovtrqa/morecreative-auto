@@ -1,0 +1,69 @@
+---
+layout: base.njk
+title: Trabalhos — More Creative
+activePage: trabalhos
+permalink: /trabalhos/
+---
+<section class="cat-hero">
+  <div class="wrap">
+    <div class="eyebrow"><span class="dot"></span>PORTFÓLIO</div>
+    <h1>Trabalhos</h1>
+    <p>Produção automotiva — fotografia, filme, motorsport e eventos.</p>
+  </div>
+</section>
+
+<nav class="cat-switch" id="filterNav">
+  <a href="#" data-cat="all" class="current">Todos</a>
+  <a href="#" data-cat="photography">Photography</a>
+  <a href="#" data-cat="film">Film</a>
+  <a href="#" data-cat="motorsport">Motorsport</a>
+  <a href="#" data-cat="events">Events</a>
+</nav>
+
+<div class="project-grid" id="worksGrid">
+  {% if works.length == 0 %}
+  <div class="wrap" style="padding:60px var(--pad);grid-column:1/-1;color:var(--fg-dim);font-family:var(--mono);font-size:14px;">
+    Nenhum trabalho publicado ainda.
+  </div>
+  {% endif %}
+  {% for w in works %}
+  <a href="/trabalho/{{ w.slug }}/" class="project-card" data-cat="{{ w.category }}">
+    <div class="project-thumb">
+      <img src="{{ w.cover or '/images/hero-placeholder.jpg' }}" alt="{{ w.title }}">
+    </div>
+    <div class="project-info">
+      <h3>{{ w.title }}</h3>
+      <div class="project-tags">{{ w.client }}<br>{{ w.year }}</div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const links = document.querySelectorAll("#filterNav a");
+    const cards = document.querySelectorAll("#worksGrid .project-card");
+
+    // apply category from URL query string on load, e.g. /trabalhos/?cat=film
+    const params = new URLSearchParams(window.location.search);
+    const initialCat = params.get("cat") || "all";
+    applyFilter(initialCat);
+
+    links.forEach((link) => {
+      link.addEventListener("click", (e) => {
+        e.preventDefault();
+        const cat = link.dataset.cat;
+        applyFilter(cat);
+        const url = cat === "all" ? "/trabalhos/" : `/trabalhos/?cat=${cat}`;
+        window.history.replaceState(null, "", url);
+      });
+    });
+
+    function applyFilter(cat) {
+      links.forEach((l) => l.classList.toggle("current", l.dataset.cat === cat));
+      cards.forEach((card) => {
+        card.style.display = cat === "all" || card.dataset.cat === cat ? "" : "none";
+      });
+    }
+  });
+</script>

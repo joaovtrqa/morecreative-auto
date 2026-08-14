@@ -1,0 +1,46 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "src/images/uploads"
+public_folder: "/images/uploads"
+
+publish_mode: simple
+
+locale: "pt"
+
+collections:
+  - name: "works"
+    label: "Trabalhos"
+    folder: "src/content/works"
+    create: true
+    slug: "{{slug}}"
+    identifier_field: title
+    fields:
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "URL amigável (slug)", name: "slug", widget: "string", hint: "Sem espaços ou acentos. Ex: nome-do-trabalho" }
+      - label: "Categoria"
+        name: "category"
+        widget: "select"
+        options:
+          - { label: "Photography", value: "photography" }
+          - { label: "Film", value: "film" }
+          - { label: "Motorsport", value: "motorsport" }
+          - { label: "Events", value: "events" }
+      - { label: "Cliente", name: "client", widget: "string" }
+      - { label: "Ano", name: "year", widget: "string" }
+      - { label: "Imagem de capa (listagem)", name: "cover", widget: "image", required: false }
+      - { label: "Descrição do trabalho", name: "body", widget: "markdown" }
+      - label: "Mídia do trabalho (imagens e vídeos)"
+        name: "media"
+        widget: "list"
+        required: false
+        fields:
+          - label: "Tipo"
+            name: "type"
+            widget: "select"
+            options:
+              - { label: "Imagem", value: "image" }
+              - { label: "Vídeo", value: "video" }
+          - { label: "Arquivo", name: "src", widget: "file", hint: "Para vídeo, você pode colar um link direto de .mp4 em vez de subir arquivo." }
+          - { label: "Legenda", name: "caption", widget: "string", required: false }
