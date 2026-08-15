@@ -1135,3 +1135,52 @@ img { display: block; max-width: 100%; }
   transform: scale(1.01);
   border-color: var(--accent-blue);
 }
+
+/* ============================================
+   MOBILE SAFETY — evita corte lateral em telas pequenas
+   ============================================ */
+@media (max-width: 480px) {
+  :root { --pad: 16px; }
+
+  .hero h1, .chapter h2, .cat-hero h1, .project-hero h1,
+  .about-hero h1, .ai-showcase-text h2, .contact-big,
+  .section-title {
+    word-break: break-word;
+  }
+
+  .btn, .btn-solid {
+    width: 100%;
+    box-sizing: border-box;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .hero-sub, .chapter-row, .about-preview, .about-meta,
+  .contact-grid, .footer-grid {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  img, video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  table { display: block; overflow-x: auto; }
+}
+
+/* ============================================
+   HOME — CTA row (text + button side by side)
+   ============================================ */
+.cta-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.cta-row .btn { flex-shrink: 0; }
+@media (max-width: 600px) {
+  .cta-row { flex-direction: column; align-items: flex-start; }
+  .cta-row .btn { width: 100%; text-align: center; justify-content: center; }
+}
