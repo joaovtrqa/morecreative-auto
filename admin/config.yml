@@ -44,3 +44,16 @@ collections:
               - { label: "Vídeo", value: "video" }
           - { label: "Arquivo", name: "src", widget: "file", hint: "Para vídeo, você pode colar um link direto de .mp4 em vez de subir arquivo." }
           - { label: "Legenda", name: "caption", widget: "string", required: false }
+
+  - name: "pages"
+    label: "Páginas"
+    files:
+      - label: "Imagens da Home"
+        name: "home"
+        file: "src/content/home.yml"
+        fields:
+          - { label: "Imagem principal (hero)", name: "hero_image", widget: "image", hint: "Imagem de fundo do topo da home." }
+          - { label: "Capa — Photography", name: "photography_cover", widget: "image" }
+          - { label: "Capa — Film", name: "film_cover", widget: "image" }
+          - { label: "Capa — Motorsport", name: "motorsport_cover", widget: "image" }
+          - { label: "Capa — Events", name: "events_cover", widget: "image" }
