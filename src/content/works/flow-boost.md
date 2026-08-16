@@ -3,8 +3,8 @@ title: Flow Boost
 slug: flow-boost
 category: film
 client: Flow Boost
-year: "2024 — atual"
-cover: ""
+year: 2024 — atual
+cover: /images/uploads/lodrina-06.jpg
 media: []
 ---
 
